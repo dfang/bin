@@ -1,0 +1,13 @@
+# README
+
+compile and install bin when save the go file
+
+```
+reflex -r '\.go$' make install
+reflex -r '\.go$' -- sh -c 'make build && make install'
+```
+
+if reflex is not available, install reflex first
+```
+bin i -f cespare/reflex
+```

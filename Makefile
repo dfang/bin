@@ -28,3 +28,6 @@ download: ## Download dependencies
 verify: download ## Code verification
 	gofmt -w -s ./.
 	golangci-lint run
+
+install: build ## Install
+	go install
