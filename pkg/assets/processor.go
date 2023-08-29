@@ -35,7 +35,7 @@ var (
 )
 
 func (f *Filter) processReader(r io.Reader) (*finalFile, error) {
-	zlog.Trace().Msgf("111%v", f.name)
+	zlog.Trace().Msgf("%v", f.name)
 
 	var buf bytes.Buffer
 	tee := io.TeeReader(r, &buf)
