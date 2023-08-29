@@ -243,6 +243,7 @@ func execShell(command string, args []string) error {
 	return nil
 }
 
+// nolint: unused
 func initLogger() {
 	output := zerolog.ConsoleWriter{Out: os.Stdout}
 	output.TimeFormat = "2006-01-02 15:04:05" // Customize the timestamp format if needed

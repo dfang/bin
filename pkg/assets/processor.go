@@ -68,8 +68,7 @@ func (f *Filter) processReader(r io.Reader) (*finalFile, error) {
 	default:
 		fmt.Println("file uncompressed")
 	}
-
-	fmt.Printf("filter %+v\n", f)
+	// fmt.Printf("filter %+v\n", f)
 
 	if processor != nil {
 		outFile, err := processor(f.repoName, outputFile)
@@ -84,15 +83,12 @@ func (f *Filter) processReader(r io.Reader) (*finalFile, error) {
 
 		// In case of e.g. a .tar.gz, process the uncompressed archive by calling recursively
 		return f.processReader(outputFile)
-	} else {
-		// outputFile, err = os.ReadFile(f.targetPath(f.name))
-		// outputFile, err = fileToReader(f.ta rgetPath(f.name))
-		// f.name =
 	}
 
 	return &finalFile{Source: outputFile, Name: f.name, PackagePath: f.packagePath}, err
 }
 
+// nolint: unused
 func fileToReader(filePath string) (io.Reader, error) {
 	file, err := os.Open(filePath)
 	if err != nil {

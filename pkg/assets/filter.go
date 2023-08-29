@@ -193,6 +193,7 @@ func (f *Filter) FilterAssets(repoName string, as []*Asset) (*FilteredAsset, err
 	return gf, nil
 }
 
+// nolint: unused
 // filterBySize: keep the smallest size one for assets with same scores, eg. jdxcode/rtx
 func filterBySize(assets []*FilteredAsset) ([]*FilteredAsset, error) {
 	if len(assets) == 0 {

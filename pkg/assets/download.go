@@ -12,10 +12,10 @@ import (
 
 	"github.com/cavaliergopher/grab/v3"
 	"github.com/cheggaaa/pb"
+	zlog "github.com/rs/zerolog/log"
 )
 
-// TODO: download an asset
-
+// nolint: unused
 func extractFilenameFromContentDisposition(contentDisposition string) (string, error) {
 	// Use a regular expression to extract the filename from the Content-Disposition header
 	re := regexp.MustCompile(`filename="?([^"]+)"?`)
@@ -27,11 +27,13 @@ func extractFilenameFromContentDisposition(contentDisposition string) (string, e
 	return matches[1], nil
 }
 
+// nolint: unused
 func fileExists(filePath string) bool {
 	_, err := os.Stat(filePath)
 	return !os.IsNotExist(err)
 }
 
+// nolint: unused
 func (f *Filter) targetPath(name string) string {
 	expectedFilePath := ""
 	if runtime.GOOS == "windows" {
@@ -45,6 +47,7 @@ func (f *Filter) targetPath(name string) string {
 	return expectedFilePath
 }
 
+// nolint: unused
 func prefixAssetURL(assetURL string) string {
 	if proxy := os.Getenv("GITHUB_PROXY_URL"); proxy != "" {
 		proxyedAsset, err := url.JoinPath(proxy, assetURL)
@@ -77,7 +80,10 @@ func grabAsset(url string, path string) {
 	barReader := bar.NewProxyReader(file)
 
 	// copy from proxy reader
-	io.Copy(writer, barReader)
+	_, err := io.Copy(writer, barReader)
+	if err != nil {
+		zlog.Error().Err(err).Msg("error when io.Copy")
+	}
 
 	// check for errors
 	if err := resp.Err(); err != nil {
