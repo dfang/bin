@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/apex/log"
+	zlog "github.com/rs/zerolog/log"
 )
 
 var cfg config
@@ -22,6 +23,9 @@ type config struct {
 	// if necessary
 	DefaultPath string             `json:"default_path"`
 	Bins        map[string]*Binary `json:"bins"`
+
+	// CacheDir is where bin downloads asset file and checksum to
+	CacheDir string `json:"cache_dir"`
 }
 
 type Binary struct {
@@ -43,11 +47,28 @@ func CheckAndLoad() error {
 		return err
 	}
 
-	if err := os.Mkdir(configDir, 0755); err != nil && !os.IsExist(err) {
-		return fmt.Errorf("Error creating config directory [%v]", err)
+	if runtime.GOOS == "windows" {
+		if home, err := os.UserHomeDir(); err == nil {
+			cfg.CacheDir = path.Join(home, ".cache/")
+		}
+	} else {
+		cfg.CacheDir = path.Join("/tmp/", "cache")
 	}
 
-	log.Debugf("Config directory is: %s", configDir)
+	if _, err := os.Stat(cfg.CacheDir); err != nil {
+		err := os.Mkdir(cfg.CacheDir, 0755)
+		if err != nil {
+			zlog.Error().Err(err).Msgf("err when create cache folder: %s", cfg.CacheDir)
+		}
+	}
+
+	if err := os.Mkdir(configDir, 0755); err != nil && !os.IsExist(err) {
+		return fmt.Errorf("error creating config directory [%v]", err)
+	}
+
+	zlog.Debug().Msgf("config directory is: %s", configDir)
+	zlog.Debug().Msgf("cache directory is: %s", cfg.CacheDir)
+
 	f, err := os.OpenFile(filepath.Join(configDir, "config.json"), os.O_RDWR|os.O_CREATE, 0664)
 	if err != nil && !os.IsNotExist(err) {
 		return err
@@ -74,7 +95,7 @@ func CheckAndLoad() error {
 				fmt.Printf("\nPlease specify a download directory: ")
 				response, err := reader.ReadString('\n')
 				if err != nil {
-					return fmt.Errorf("Invalid input")
+					return fmt.Errorf("invalid input")
 				}
 				response = strings.TrimSpace(response)
 
@@ -94,7 +115,7 @@ func CheckAndLoad() error {
 		}
 
 	}
-	log.Debugf("Download path set to %s", cfg.DefaultPath)
+	zlog.Debug().Msgf("Download path set to %s", cfg.DefaultPath)
 	return nil
 }
 
@@ -139,6 +160,8 @@ func write() error {
 
 	defer f.Close()
 
+	fmt.Printf("%+v\n", cfg)
+
 	decoder := json.NewEncoder(f)
 	decoder.SetIndent("", "    ")
 	err = decoder.Encode(cfg)
@@ -148,6 +171,10 @@ func write() error {
 	}
 
 	return nil
+}
+
+func GetCacheDir() string {
+	return cfg.CacheDir
 }
 
 // GetArch is the running program's operating system target:
@@ -172,6 +199,14 @@ func GetOS() []string {
 		// Adding win since some repositories release with that as the indicator of a windows binary
 		res = append(res, "win")
 	}
+
+	if runtime.GOOS == "darwin" {
+		res = append(res, "macos")
+		res = append(res, "macOS")
+		res = append(res, "osx")
+		res = append(res, "apple")
+	}
+
 	return res
 }
 

@@ -61,7 +61,7 @@ func newEnsureCmd() *ensureCmd {
 					return err
 				}
 
-				if err = saveToDisk(pResult, ep, true); err != nil {
+				if err = installBinary(pResult, ep, true); err != nil {
 					return fmt.Errorf("Error installing binary %w", err)
 				}
 

@@ -123,7 +123,7 @@ func newUpdateCmd() *updateCmd {
 					return err
 				}
 
-				if err = saveToDisk(pResult, b.Path, true); err != nil {
+				if err = installBinary(pResult, b.Path, true); err != nil {
 					return fmt.Errorf("Error installing binary %w", err)
 				}
 

@@ -10,6 +10,8 @@ import (
 	"github.com/fatih/color"
 	"github.com/marcosnils/bin/pkg/config"
 	"github.com/spf13/cobra"
+
+	"github.com/rs/zerolog"
 )
 
 func Execute(version string, exit func(int), args []string) {
@@ -49,6 +51,7 @@ func (cmd *rootCmd) Execute(args []string) {
 type rootCmd struct {
 	cmd   *cobra.Command
 	debug bool
+	trace bool
 	exit  func(int)
 }
 
@@ -65,7 +68,12 @@ func newRootCmd(version string, exit func(int)) *rootCmd {
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
 			if root.debug {
 				log.SetLevel(log.DebugLevel)
-				log.Debugf("debug logs enabled, version: %s\n", version)
+				// log.Debugf("debug logs enabled, version: %s\n", version)
+				zerolog.SetGlobalLevel(zerolog.DebugLevel)
+			}
+
+			if root.trace {
+				zerolog.SetGlobalLevel(zerolog.TraceLevel)
 			}
 
 			// check and load config after handlers are configured
@@ -77,6 +85,7 @@ func newRootCmd(version string, exit func(int)) *rootCmd {
 	}
 
 	cmd.PersistentFlags().BoolVar(&root.debug, "debug", false, "Enable debug mode")
+	cmd.PersistentFlags().BoolVar(&root.trace, "trace", false, "Enable trace mode")
 	cmd.AddCommand(
 		newInstallCmd().cmd,
 		newEnsureCmd().cmd,

@@ -31,3 +31,7 @@ verify: download ## Code verification
 
 install: build ## Install
 	go install
+
+integration:
+	go build -o /tmp/bin .
+	go test -tags=integration

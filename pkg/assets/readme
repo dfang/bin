@@ -1,0 +1,8 @@
+1. get release information (latest or tag) update to v53 or v4 GraphQL api
+2. filter: determine which asset to download (collect user/repo, os, arch, filterd_asset for analytics)
+3. download asset, (timeout, resumable download, skip download if file exists, and use proxy if GITHUB_PROXY env is set)
+4. validate checksum ???
+5. process downloaded asset (call extractors or just copy), smart guess which one is the executable
+6. verify installtion
+
+(latest or tag) update to v53 or v4 GraphQL api

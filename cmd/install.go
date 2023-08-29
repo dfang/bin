@@ -4,11 +4,17 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
+	"path"
 	"path/filepath"
+	"strings"
 
 	"github.com/apex/log"
 	"github.com/marcosnils/bin/pkg/config"
 	"github.com/marcosnils/bin/pkg/providers"
+	"github.com/marcosnils/bin/pkg/util"
+	"github.com/rs/zerolog"
+	zlog "github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 )
 
@@ -34,25 +40,43 @@ func newInstallCmd() *installCmd {
 		SilenceErrors: true,
 		Args:          cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			zlog.Trace().Msgf("args: %v", args)
 			u := args[0]
 
-			var path, argpath string
+			// <OWNER>/<REPO> -> github.com/<OWNER/<REPO>
+			if !strings.Contains(u, "github.com") {
+				if strings.Contains(u, "/") {
+					u = fmt.Sprintf("github.com/%s", u)
+				} else {
+					u = DEFAULT_SHORTHANDS[u]
+				}
+			}
+
+			var installDir string
+			var fpath, argpath string
 			if len(args) > 1 {
 				argpath = args[1]
 				var err error
 				// Resolve to absolute path
-				if path, err = filepath.Abs(os.ExpandEnv(args[1])); err != nil {
+				if fpath, err = filepath.Abs(os.ExpandEnv(args[1])); err != nil {
 					return err
 				}
 			} else if len(config.Get().DefaultPath) > 0 {
-				path = config.Get().DefaultPath
+				fpath = config.Get().DefaultPath
 			} else {
 				var err error
-				path, err = os.Getwd()
+				fpath, err = os.Getwd()
 				if err != nil {
 					return err
 				}
 			}
+
+			// expand ~/ in path
+			if strings.HasPrefix(fpath, "~/") {
+				dirname, _ := os.UserHomeDir()
+				fpath = filepath.Join(dirname, fpath[2:])
+			}
+			installDir = fpath
 
 			// TODO check if binary already exists in config
 			// and triger the update process if that's the case
@@ -61,28 +85,43 @@ func newInstallCmd() *installCmd {
 			if err != nil {
 				return err
 			}
+			zlog.Trace().Msgf("provider %+v", p)
 
 			pResult, err := p.Fetch(&providers.FetchOpts{All: root.opts.all})
 			if err != nil {
 				return err
 			}
+			fmt.Printf("pResult %+v\n", pResult)
+			fmt.Printf("fpath: %+v\n", fpath)
 
-			path, err = checkFinalPath(path, pResult.Name)
+			fpath, err = checkFinalPath(fpath, pResult.Name)
 			if err != nil {
 				return err
 			}
+			fmt.Printf("fpath: %+v\n", fpath)
 
 			if len(argpath) == 0 {
-				argpath = path
+				argpath = fpath
 			}
+			fmt.Printf("argpath: %+v\n", argpath)
 
-			if err = saveToDisk(pResult, path, root.opts.force); err != nil {
+			// fileName := util.CanonicalizeBinaryName(pResult.Name)
+			fileName := util.CanonicalizeBinaryName(pResult.Name)
+			dpath := path.Join(installDir, fileName)
+			fmt.Printf("will install to %s\n", dpath)
+
+			// install binary to path in config
+			// fmt.Printf("install binary to path in config: %s\n", "~/bin/")
+			fmt.Println("pResult", pResult)
+			fmt.Println("dpath", dpath)
+			// fmt.Println(root.opts.force)
+			if err = installBinary(pResult, dpath, root.opts.force); err != nil {
 				return fmt.Errorf("error installing binary: %w", err)
 			}
 
 			err = config.UpsertBinary(&config.Binary{
 				RemoteName:  pResult.Name,
-				Path:        argpath,
+				Path:        fpath,
 				Version:     pResult.Version,
 				Hash:        fmt.Sprintf("%x", pResult.Hash.Sum(nil)),
 				URL:         u,
@@ -94,7 +133,12 @@ func newInstallCmd() *installCmd {
 				return err
 			}
 
-			log.Infof("Done installing %s %s", pResult.Name, pResult.Version)
+			zlog.Info().Msgf("Done installing %s %s", pResult.Name, pResult.Version)
+			zlog.Info().Msgf("Run %s --help to verify installation", pResult.Name)
+			_ = execShell(dpath, []string{"--help"})
+			// if err != nil {
+			// 	fmt.Println("the installed binary can't not run successfuly, please report on github issues ???")
+			// }
 
 			return nil
 		},
@@ -126,14 +170,15 @@ func checkFinalPath(path, fileName string) (string, error) {
 	return path, nil
 }
 
-// saveToDisk saves the specified binary to the desired path
+// installBinary saves the specified binary to the desired path
 // and makes it executable. It also checks if any other binary
 // has the same hash and exists if so.
 
 // TODO check if other binary has the same hash and warn about it.
 // TODO if the file is zipped, tared, whatever then extract it
-func saveToDisk(f *providers.File, path string, overwrite bool) error {
-	epath := os.ExpandEnv((path))
+func installBinary(f *providers.File, path string, overwrite bool) error {
+	epath := os.ExpandEnv(path)
+	fmt.Println("epath:", epath)
 
 	var extraFlags int = os.O_EXCL
 
@@ -153,11 +198,56 @@ func saveToDisk(f *providers.File, path string, overwrite bool) error {
 
 	defer file.Close()
 
-	log.Infof("Copying for %s@%s into %s", f.Name, f.Version, epath)
+	zlog.Info().Msgf("Copying from %s@%s into %s", f.Name, f.Version, epath)
 	_, err = io.Copy(file, f.Data)
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func execShell(command string, args []string) error {
+	cmd := exec.Command(command, args...)
+	// command.Stdout = os.Stdout
+	// command.Stderr = os.Stderr
+	// var err = command.Start()
+	// if err != nil {
+	// 	return err
+	// }
+	// err = command.Wait()
+	// if err != nil {
+	// 	return err
+	// }
+
+	// Run the command and capture the output and error
+	output, err := cmd.CombinedOutput()
+
+	if err != nil {
+		// If the command returns an error, handle it here
+		fmt.Println("Error:", err)
+	}
+
+	// Get the exit code of the command
+	exitCode := cmd.ProcessState.ExitCode()
+
+	zlog.Debug().Msgf("Exit Code: %d", exitCode)
+	zlog.Debug().Msgf("Output:\n%s\n", output)
+
+	if exitCode != 0 {
+		zlog.Info().Msg("the installed binary can't not run successfuly, please report on github issues or check issues ???")
+	} else {
+		zlog.Info().Msg("installation succeed")
+	}
+
+	return nil
+}
+
+func initLogger() {
+	output := zerolog.ConsoleWriter{Out: os.Stdout}
+	output.TimeFormat = "2006-01-02 15:04:05" // Customize the timestamp format if needed
+	// output.FormatLevel = func(i interface{}) string {
+	// 	return colorizeLevel(i.(string))
+	// }
+	zlog.Logger = zlog.Output(output)
 }
