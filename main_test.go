@@ -23,8 +23,8 @@ func TestIntegration(t *testing.T) {
 			ExitCode: 0,
 		},
 		{
-			Name:     "bin",
-			Repo:     "github.com/marcosnils/bin",
+			Name:     "fzf",
+			Repo:     "github.com/junegunn/fzf",
 			ExitCode: 0,
 		},
 	}
@@ -44,7 +44,7 @@ func TestIntegration(t *testing.T) {
 }
 
 func run_cmd(name string, args []string) int {
-	install_args := []string{"i", "-f", name, "/tmp/it/"}
+	install_args := []string{"i", "-f", name, "/tmp/"}
 	cmd := exec.Command("/tmp/bin", install_args...)
 	output, err := cmd.CombinedOutput()
 	if err != nil {
