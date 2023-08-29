@@ -2,7 +2,6 @@ package assets
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"os"
 	"path"
@@ -78,7 +77,6 @@ func SanitizeName(name, version string) string {
 		replacements = append(replacements, "."+osName, "")
 
 		firstPass = false
-
 	}
 
 	replacements = append(replacements, "_"+version, "")
@@ -99,30 +97,7 @@ func (f *Filter) ProcessURL(gf *FilteredAsset) (*finalFile, error) {
 	grabAsset(gf.BrowserDownloadURL, expectedFilePath)
 	f.name = gf.Name
 
-	// timeout := 10 * time.Second
-	// // Create a context with the specified timeout
-	// ctx, cancel := context.WithTimeout(context.Background(), timeout)
-	// defer cancel()
-	// client := &http.Client{}
-	// // We're not closing the body here since the caller is in charge of that
-	// req, err := http.NewRequest(http.MethodGet, gf.BrowserDownloadURL, nil)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// for name, value := range gf.ExtraHeaders {
-	// 	req.Header.Add(name, value)
-	// }
-	// // log.Debugf("Checking binary from %s", gf.BrowserDownloadURL)
-	// zlog.Info().Msgf("Checking binary from %s", gf.BrowserDownloadURL)
-
-	// req = req.WithContext(ctx)
-	// res, err := client.Do(req)
-	// if err != nil {
-	// 	if ctx.Err() == context.DeadlineExceeded {
-	// 		fmt.Println("Request timed out")
-	// if _, err := os.Stat(expectedFilePath); err == nil {
-
-	fmt.Println("processing downloaded asset ...")
+	zlog.Info().Msg("processing downloaded asset ...")
 	bar := pb.Full.Start64(0)
 	expectedFile, _ := os.Open(expectedFilePath)
 	defer expectedFile.Close()
@@ -135,74 +110,4 @@ func (f *Filter) ProcessURL(gf *FilteredAsset) (*finalFile, error) {
 	}
 	bar.Finish()
 	return f.processReader(buf)
-
-	// }
-	// 		ctx.Done()
-	// 	} else {
-	// 		fmt.Println("Error making request:", err)
-	// 	}
-	// }
-	// defer res.Body.Close()
-
-	// if res.StatusCode > 299 || res.StatusCode < 200 {
-	// 	return nil, fmt.Errorf("%d response when checking binary from %s", res.StatusCode, gf.BrowserDownloadURL)
-	// }
-
-	// fmt.Printf("resp: %+v\n", res)
-	// contentDisposition := res.Header.Get("Content-Disposition")
-	// fmt.Printf("contentMd5: %s\n", contentDisposition)
-	// extractedFilename, err := extractFilenameFromContentDisposition(contentDisposition)
-	// if err != nil {
-	// 	zlog.Error().Err(err).Msg("err when extract filename From ContentDisposition header")
-	// }
-
-	// if _, err := os.Stat(expectedFilePath); err == nil && extractedFilename == filename {
-	// 	log.Infof("file exists, skip download")
-	// 	bar := pb.Full.Start64(res.ContentLength)
-	// 	expectedFile, err := os.Open(expectedFilePath)
-	// 	if err != nil {
-	// 		zlog.Error().Err(err).Msg("err when os.Open")
-	// 		return nil, err
-	// 	}
-	// 	defer expectedFile.Close()
-	// 	barReader := bar.NewProxyReader(expectedFile)
-	// 	defer bar.Finish()
-	// 	buf := new(bytes.Buffer)
-	// 	_, err = io.Copy(buf, barReader)
-	// 	if err != nil {
-	// 		zlog.Error().Err(err).Msg("err when io.Copy")
-	// 		return nil, err
-	// 	}
-	// 	bar.Finish()
-	// 	return f.processReader(buf)
-	// }
-	// else {
-	// 	// filePath := "/tmp/" + gf.Name
-	// 	body, err := io.ReadAll(res.Body)
-	// 	if err != nil {
-	// 		fmt.Println("Error:", err)
-	// 	}
-
-	// 	err = os.WriteFile(expectedFilePath, body, 0777)
-	// 	if err != nil {
-	// 		fmt.Println("Error:", err)
-	// 	}
-
-	// 	// We're caching the whole file into memory so we can prompt
-	// 	// the user which file they want to download
-
-	// 	// log.Infof("Starting download of %s", gf.URL)
-	// 	log.Infof("Starting download of %s", gf.BrowserDownloadURL)
-	// 	bar := pb.Full.Start64(res.ContentLength)
-	// 	barReader := bar.NewProxyReader(res.Body)
-	// 	defer bar.Finish()
-	// 	buf := new(bytes.Buffer)
-	// 	_, err = io.Copy(buf, barReader)
-	// 	if err != nil {
-	// 		zlog.Info().Err(err).Msg("error when io.Copy")
-	// 		return nil, err
-	// 	}
-	// 	bar.Finish()
-	// 	return f.processReader(buf)
-	// }
 }

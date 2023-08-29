@@ -1,3 +1,6 @@
+// filter.go
+//
+// filter assets from a release, determine which one is the one to download based on highest scoring
 package assets
 
 import (

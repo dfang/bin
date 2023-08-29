@@ -1,3 +1,6 @@
+// processor.go
+//
+// process downloaded asset, maybe it is binary file(eg. jq-osx-amd64) or an archive(tar.gz, tar.xz, zip)
 package assets
 
 import (

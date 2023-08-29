@@ -1,3 +1,6 @@
+// download.go
+//
+// download an asset after filtering
 package assets
 
 import (

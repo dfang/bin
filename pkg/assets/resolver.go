@@ -1,3 +1,6 @@
+// resolver.go
+//
+// resolve target host info (OS, arch) for filtering the best asset to download
 package assets
 
 import "github.com/marcosnils/bin/pkg/config"

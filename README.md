@@ -1,6 +1,6 @@
 # bin
 
-Manages binary files downloaded from different sources
+Manages binary files downloaded from different sources. [中文说明](./README_cn.md)
 
 ![bin](https://user-images.githubusercontent.com/1578458/87901619-ee629a80-ca2d-11ea-8609-8a8eb39801d2.gif)
 
