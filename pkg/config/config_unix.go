@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/apex/log"
-	"github.com/marcosnils/bin/pkg/options"
+	"github.com/dfang/bin/pkg/options"
 	"golang.org/x/sys/unix"
 )
 

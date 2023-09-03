@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/marcosnils/bin/pkg/config"
+	"github.com/dfang/bin/pkg/config"
 	"github.com/spf13/cobra"
 )
 

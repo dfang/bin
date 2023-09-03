@@ -10,8 +10,8 @@ import (
 	"strings"
 
 	"github.com/apex/log"
+	"github.com/dfang/bin/pkg/assets"
 	"github.com/google/go-github/v53/github"
-	"github.com/marcosnils/bin/pkg/assets"
 	"github.com/rs/zerolog"
 	zlog "github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"

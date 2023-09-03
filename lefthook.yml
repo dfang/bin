@@ -21,9 +21,8 @@ pre-commit:
       run: go fmt ./...
     govet:
       tags: backend style
-      files: git ls-files -m
       glob: "*.go"
-      run: go vet {files}
+      run: go vet ./...
     lint:
       tags: backend style
       glob: "*.go"

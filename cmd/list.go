@@ -6,8 +6,8 @@ import (
 	"sort"
 
 	"github.com/WeiZhang555/tabwriter"
+	"github.com/dfang/bin/pkg/config"
 	"github.com/fatih/color"
-	"github.com/marcosnils/bin/pkg/config"
 	"github.com/spf13/cobra"
 )
 

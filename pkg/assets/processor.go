@@ -16,13 +16,13 @@ import (
 	"strings"
 
 	"github.com/apex/log"
+	"github.com/dfang/bin/pkg/options"
+	bstrings "github.com/dfang/bin/pkg/strings"
+	"github.com/dfang/bin/pkg/util"
 	"github.com/h2non/filetype"
 	"github.com/h2non/filetype/matchers"
 	"github.com/h2non/filetype/types"
 	"github.com/krolaw/zipstream"
-	"github.com/marcosnils/bin/pkg/options"
-	bstrings "github.com/marcosnils/bin/pkg/strings"
-	"github.com/marcosnils/bin/pkg/util"
 	zlog "github.com/rs/zerolog/log"
 	"github.com/xi2/xz"
 )

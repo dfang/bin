@@ -3,7 +3,7 @@
 // resolve target host info (OS, arch) for filtering the best asset to download
 package assets
 
-import "github.com/marcosnils/bin/pkg/config"
+import "github.com/dfang/bin/pkg/config"
 
 type runtimeResolver struct{}
 

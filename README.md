@@ -25,8 +25,8 @@ be more than happy to brainstorm about possibilities.
 
 ## Installing
 
-1. Download `bin` from the [releases](https://github.com/marcosnils/bin/releases)
-2. Run `./bin install github.com/marcosnils/bin` so `bin` is managed by `bin` itself
+1. Download `bin` from the [releases](https://github.com/dfang/bin/releases)
+2. Run `./bin install github.com/dfang/bin` so `bin` is managed by `bin` itself
 3. Run `bin ls` to make sure bin has been installed correctly. You can now remove the first file you downloaded.
 4. Enjoy!
 
@@ -64,7 +64,7 @@ bin update [bin]... # Scans binaries and prompts for update
 
 ### Can you give some example tools
 
-Yes. Following [list](https://github.com/marcosnils/bin/wiki/Tools-list)
+Yes. Following [list](https://github.com/dfang/bin/wiki/Tools-list)
 
 ### There are some bugs and the code is not tested
 

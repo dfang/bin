@@ -1,4 +1,4 @@
-module github.com/marcosnils/bin
+module github.com/dfang/bin
 
 go 1.20
 

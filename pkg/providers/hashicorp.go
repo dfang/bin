@@ -12,8 +12,8 @@ import (
 
 	"github.com/apex/log"
 	"github.com/coreos/go-semver/semver"
-	"github.com/marcosnils/bin/pkg/assets"
-	"github.com/marcosnils/bin/pkg/options"
+	"github.com/dfang/bin/pkg/assets"
+	"github.com/dfang/bin/pkg/options"
 )
 
 const (

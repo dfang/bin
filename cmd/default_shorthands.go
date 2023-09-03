@@ -7,7 +7,7 @@ func init() {
 	DEFAULT_SHORTHANDS["ripgrep"] = "github.com/BurntSushi/ripgrep"
 	DEFAULT_SHORTHANDS["rg"] = "github.com/BurntSushi/ripgrep"
 	DEFAULT_SHORTHANDS["fzf"] = "github.com/junegunn/fzf"
-	DEFAULT_SHORTHANDS["bin"] = "github.com/marcosnils/bin"
+	DEFAULT_SHORTHANDS["bin"] = "github.com/dfang/bin"
 	DEFAULT_SHORTHANDS["just"] = "github.com/casey/just"
 	DEFAULT_SHORTHANDS["jq"] = "github.com/jqlang/jq"
 	DEFAULT_SHORTHANDS["yq"] = "github.com/mikefarah/yq"
