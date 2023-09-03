@@ -45,7 +45,7 @@ func (d *docker) Fetch(opts *FetchOpts) (*File, error) {
 	}, nil
 }
 
-// TODO: missing implementation here
+// TODO: missing implementation here.
 func (d *docker) GetLatestVersion() (string, string, error) {
 	return d.tag, "", nil
 }

@@ -56,20 +56,20 @@ func CheckAndLoad() error {
 	}
 
 	if _, err := os.Stat(cfg.CacheDir); err != nil {
-		err := os.Mkdir(cfg.CacheDir, 0755)
+		err := os.Mkdir(cfg.CacheDir, 0o755)
 		if err != nil {
 			zlog.Error().Err(err).Msgf("err when create cache folder: %s", cfg.CacheDir)
 		}
 	}
 
-	if err := os.Mkdir(configDir, 0755); err != nil && !os.IsExist(err) {
+	if err := os.Mkdir(configDir, 0o755); err != nil && !os.IsExist(err) {
 		return fmt.Errorf("error creating config directory [%v]", err)
 	}
 
 	zlog.Debug().Msgf("config directory is: %s", configDir)
 	zlog.Debug().Msgf("cache directory is: %s", cfg.CacheDir)
 
-	f, err := os.OpenFile(filepath.Join(configDir, "config.json"), os.O_RDWR|os.O_CREATE, 0664)
+	f, err := os.OpenFile(filepath.Join(configDir, "config.json"), os.O_RDWR|os.O_CREATE, 0o664)
 	if err != nil && !os.IsNotExist(err) {
 		return err
 	}
@@ -113,7 +113,6 @@ func CheckAndLoad() error {
 		if err := write(); err != nil {
 			return err
 		}
-
 	}
 	zlog.Debug().Msgf("Download path set to %s", cfg.DefaultPath)
 	return nil
@@ -124,7 +123,7 @@ func Get() *config {
 }
 
 // UpsertBinary adds or updats an existing
-// binary resource in the config
+// binary resource in the config.
 func UpsertBinary(c *Binary) error {
 	if c != nil {
 		cfg.Bins[c.Path] = c
@@ -138,7 +137,7 @@ func UpsertBinary(c *Binary) error {
 }
 
 // RemoveBinaries removes the specified paths
-// from bin configuration. It doesn't care about the order
+// from bin configuration. It doesn't care about the order.
 func RemoveBinaries(paths []string) error {
 	for _, p := range paths {
 		delete(cfg.Bins, p)
@@ -153,7 +152,7 @@ func write() error {
 		return err
 	}
 
-	f, err := os.OpenFile(filepath.Join(configDir, "config.json"), os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0664)
+	f, err := os.OpenFile(filepath.Join(configDir, "config.json"), os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0o664)
 	if err != nil {
 		return err
 	}

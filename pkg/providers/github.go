@@ -77,7 +77,7 @@ func (g *gitHub) Fetch(opts *FetchOpts) (*File, error) {
 	version := release.GetTagName()
 
 	// TODO calculate file hash. Not sure if we can / should do it here
-	// since we don't want to read the file unnecesarily. Additionally, sometimes
+	// since we don't want to read the file unnecessarily. Additionally, sometimes
 	// releases have .sha256 files, so it'd be nice to check for those also
 	// file := &File{Data: outFile.Source, Name: assets.SanitizeName(outFile.Name, version), Hash: sha256.New(), Version: version, PackagePath: outFile.PackagePath}
 
@@ -88,7 +88,7 @@ func (g *gitHub) Fetch(opts *FetchOpts) (*File, error) {
 }
 
 // GetLatestVersion checks the latest repo release and
-// returns the corresponding name and url to fetch the version
+// returns the corresponding name and url to fetch the version.
 func (g *gitHub) GetLatestVersion() (string, string, error) {
 	log.Debugf("Getting latest release for %s/%s", g.owner, g.repo)
 	release, _, err := g.client.Repositories.GetLatestRelease(context.TODO(), g.owner, g.repo)
@@ -121,7 +121,6 @@ func newGitHub(u *url.URL) (Provider, error) {
 				tag = strings.Join(ps[i+2:], "/")
 			}
 		}
-
 	}
 
 	token := os.Getenv("GITHUB_AUTH_TOKEN")

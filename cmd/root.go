@@ -9,9 +9,8 @@ import (
 	"github.com/apex/log/handlers/cli"
 	"github.com/fatih/color"
 	"github.com/marcosnils/bin/pkg/config"
-	"github.com/spf13/cobra"
-
 	"github.com/rs/zerolog"
+	"github.com/spf13/cobra"
 )
 
 func Execute(version string, exit func(int), args []string) {

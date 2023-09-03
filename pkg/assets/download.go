@@ -62,7 +62,7 @@ func prefixAssetURL(assetURL string) string {
 	return assetURL
 }
 
-func grabAsset(url string, path string) {
+func grabAsset(url, path string) {
 	// create client
 	client := grab.NewClient()
 	// req, _ := grab.NewRequest(".", url)

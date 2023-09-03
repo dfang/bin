@@ -103,7 +103,7 @@ func fileToReader(filePath string) (io.Reader, error) {
 }
 
 // processGz receives a tar.gz file and returns the
-// correct file for bin to download
+// correct file for bin to download.
 func (f *Filter) processGz(name string, r io.Reader) (*finalFile, error) {
 	gr, err := gzip.NewReader(r)
 	if err != nil {
@@ -233,7 +233,7 @@ func (f *Filter) processZip(name string, r io.Reader) (*finalFile, error) {
 }
 
 // isSupportedExt checks if this provider supports
-// dealing with this specific file extension
+// dealing with this specific file extension.
 func isSupportedExt(filename string) bool {
 	if ext := strings.TrimPrefix(filepath.Ext(filename), "."); len(ext) > 0 {
 		switch filetype.GetType(ext) {
@@ -253,7 +253,7 @@ func isSupportedExt(filename string) bool {
 
 // FilterAssetContents receives a slice of GL assets and tries to
 // select the proper one and ask the user to manually select one
-// in case it can't determine it
+// in case it can't determine it.
 func (f *Filter) FilterAssetContents(repoName string, as []*Asset) (*FilteredAsset, error) {
 	matches := []*FilteredAsset{}
 	if len(as) == 1 {
@@ -349,7 +349,6 @@ func (f *Filter) FilterAssetContents(repoName string, as []*Asset) (*FilteredAss
 					zlog.Debug().Msgf("Keeping %v with highest score %v", matches[i].Name, matches[i].score)
 				}
 			}
-
 		} else {
 			zlog.Debug().Msgf("--all flag was supplied, skipping scoring")
 			for _, a := range as {

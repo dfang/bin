@@ -43,7 +43,6 @@ func newRemoveCmd() *removeCmd {
 							return fmt.Errorf("Error removing path %s: %v", os.ExpandEnv(bp), err)
 						}
 						continue
-
 					}
 				}
 			}

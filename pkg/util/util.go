@@ -11,7 +11,7 @@ import (
 // bin_0.17.0_Darwin_x86_64 -> bin
 // protoc-gen-buf-lint-Darwin-x86_64 -> protoc-gen-buf-lint
 // xgit_Windows_x86_64 -> xgit
-// CanonicalizeBinaryName remove version, os, arch from filename
+// CanonicalizeBinaryName remove version, os, arch from filename.
 func CanonicalizeBinaryName(filename string) string {
 	// Remove versions, operating systems, and architecture identifiers
 	patternsToRemove := []string{
@@ -37,7 +37,7 @@ func RemoveFileExtension(filename string) string {
 	return filename[:len(filename)-len(filepath.Ext(filename))]
 }
 
-// files like bat.1, bat.bash definitely non executable
+// files like bat.1, bat.bash definitely non executable.
 func FileHasExt(name string) bool {
 	// on non-windows systems, executable files are mostly without file extension
 	// this can filter out bat.1, bat.bash
@@ -57,7 +57,7 @@ func IsExecutable(filePath string) bool {
 		return false
 	}
 	// Check if the file is executable
-	isExecutable := (fileInfo.Mode() & 0111) != 0
+	isExecutable := (fileInfo.Mode() & 0o111) != 0
 	if isExecutable {
 		fmt.Println("The file is executable.")
 	} else {

@@ -84,7 +84,7 @@ func setup() {
 	configDir := filepath.Join(homeDir, ".config", "bin")
 
 	// Create directories recursively if they don't exist
-	err = os.MkdirAll(configDir, 0755)
+	err = os.MkdirAll(configDir, 0o755)
 	if err != nil {
 		fmt.Println("Error creating directories:", err)
 		return
@@ -94,7 +94,7 @@ func setup() {
 	configPath := filepath.Join(configDir, "config.json")
 
 	// Write the configuration data to the file
-	err = os.WriteFile(configPath, []byte(configData), 0644)
+	err = os.WriteFile(configPath, []byte(configData), 0o644)
 	if err != nil {
 		fmt.Println("Error writing to file:", err)
 		return

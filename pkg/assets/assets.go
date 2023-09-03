@@ -31,7 +31,7 @@ func (g Asset) String() string {
 }
 
 // TODO: use BrowserDownloadURL to download not API URL
-// see ReleaseAsset struct in go-github/github/repo_releases.go
+// see ReleaseAsset struct in go-github/github/repo_releases.go.
 type FilteredAsset struct {
 	RepoName           string
 	Name               string
@@ -51,7 +51,7 @@ type finalFile struct {
 }
 
 // SanitizeName removes irrelevant information from the
-// file name in case it exists
+// file name in case it exists.
 func SanitizeName(name, version string) string {
 	name = strings.ToLower(name)
 	replacements := []string{}

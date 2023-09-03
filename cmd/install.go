@@ -137,7 +137,7 @@ func newInstallCmd() *installCmd {
 			zlog.Info().Msgf("Run %s --help to verify installation", pResult.Name)
 			_ = execShell(dpath, []string{"--help"})
 			// if err != nil {
-			// 	fmt.Println("the installed binary can't not run successfuly, please report on github issues ???")
+			// 	fmt.Println("the installed binary can't not run successfully, please report on github issues ???")
 			// }
 
 			return nil
@@ -154,7 +154,7 @@ func newInstallCmd() *installCmd {
 // checkFinalPath checks if path exists and if it's a dir or not
 // and returns the correct final file path. It also
 // checks if the path already exists and prompts
-// the user to override
+// the user to override.
 func checkFinalPath(path, fileName string) (string, error) {
 	fi, err := os.Stat(os.ExpandEnv(path))
 
@@ -175,7 +175,7 @@ func checkFinalPath(path, fileName string) (string, error) {
 // has the same hash and exists if so.
 
 // TODO check if other binary has the same hash and warn about it.
-// TODO if the file is zipped, tared, whatever then extract it
+// TODO if the file is zipped, tared, whatever then extract it.
 func installBinary(f *providers.File, path string, overwrite bool) error {
 	epath := os.ExpandEnv(path)
 	fmt.Println("epath:", epath)
@@ -222,7 +222,6 @@ func execShell(command string, args []string) error {
 
 	// Run the command and capture the output and error
 	output, err := cmd.CombinedOutput()
-
 	if err != nil {
 		// If the command returns an error, handle it here
 		fmt.Println("Error:", err)
@@ -235,7 +234,7 @@ func execShell(command string, args []string) error {
 	zlog.Debug().Msgf("Output:\n%s\n", output)
 
 	if exitCode != 0 {
-		zlog.Info().Msg("the installed binary can't not run successfuly, please report on github issues or check issues ???")
+		zlog.Info().Msg("the installed binary can't not run successfully, please report on github issues or check issues ???")
 	} else {
 		zlog.Info().Msg("installation succeed")
 	}

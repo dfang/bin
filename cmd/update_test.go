@@ -69,5 +69,4 @@ func TestGetLatestVersion(t *testing.T) {
 			t.Fatalf("For case %#v: %#v does not match %#v", c.in, v, c.out)
 		}
 	}
-
 }

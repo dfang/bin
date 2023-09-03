@@ -52,7 +52,6 @@ func TestSanitizeName(t *testing.T) {
 			t.Fatalf("Error replacing %s: %s does not match %s", c.in, n, c.out)
 		}
 	}
-
 }
 
 type args struct {
@@ -161,7 +160,6 @@ func TestFilterAssets(t *testing.T) {
 			t.Fatalf("Error filtering %+v: %+v does not match %s", c.in, n, c.out)
 		}
 	}
-
 }
 
 func TestIsSupportedExt(t *testing.T) {
@@ -185,5 +183,4 @@ func TestIsSupportedExt(t *testing.T) {
 			t.Fatalf("Expected result for extension %v to be %v, but got result %v", c.in, c.out, result)
 		}
 	}
-
 }

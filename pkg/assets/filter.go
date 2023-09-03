@@ -48,7 +48,7 @@ type FilterOpts struct {
 	PackagePath string
 }
 
-func InitFilter(repoName string, name string, packagePath string, opts *FilterOpts) *Filter {
+func InitFilter(repoName, name, packagePath string, opts *FilterOpts) *Filter {
 	return &Filter{
 		repoName:    repoName,
 		name:        name,
@@ -70,7 +70,7 @@ func (g FilteredAsset) String() string {
 
 // FilterAssets receives a slice of GL assets and tries to
 // select the proper one and ask the user to manually select one
-// in case it can't determine it
+// in case it can't determine it.
 func (f *Filter) FilterAssets(repoName string, as []*Asset) (*FilteredAsset, error) {
 	matches := []*FilteredAsset{}
 	if len(as) == 1 {
@@ -150,7 +150,6 @@ func (f *Filter) FilterAssets(repoName string, as []*Asset) (*FilteredAsset, err
 					zlog.Trace().Msgf("Keeping %v with highest score %v", matches[i].BrowserDownloadURL, matches[i].score)
 				}
 			}
-
 		} else {
 			log.Debugf("--all flag was supplied, skipping scoring")
 			for _, a := range as {
@@ -197,7 +196,7 @@ func (f *Filter) FilterAssets(repoName string, as []*Asset) (*FilteredAsset, err
 }
 
 // nolint: unused
-// filterBySize: keep the smallest size one for assets with same scores, eg. jdxcode/rtx
+// filterBySize: keep the smallest size one for assets with same scores, eg. jdxcode/rtx.
 func filterBySize(assets []*FilteredAsset) ([]*FilteredAsset, error) {
 	if len(assets) == 0 {
 		return []*FilteredAsset{}, fmt.Errorf("could not find any compatible files") // Return an empty file if the slice is empty

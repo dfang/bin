@@ -108,7 +108,6 @@ func newUpdateCmd() *updateCmd {
 			// the same thing as install logic. Refactor to
 			// use the same code in both places
 			for ui, b := range toUpdate {
-
 				p, err := providers.New(ui.url, b.Provider)
 				if err != nil {
 					return err
